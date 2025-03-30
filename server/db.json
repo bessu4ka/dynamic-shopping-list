@@ -5,35 +5,21 @@
       "name": "Apples",
       "quantity": 0,
       "category": "Fruits",
-      "purchased": true
+      "purchased": false
     },
     {
       "id": "2",
       "name": "Milk",
       "quantity": 2,
       "category": "Dairy",
-      "purchased": false
+      "purchased": true
     },
     {
       "id": "3",
       "name": "Carrots",
       "quantity": 9,
       "category": "Vegetables",
-      "purchased": false
-    },
-    {
-      "id": "1743344318860",
-      "name": "test",
-      "quantity": 14,
-      "category": "Dairy",
-      "purchased": false
-    },
-    {
-      "id": "1743345111483",
-      "name": "asd",
-      "quantity": 1,
-      "category": "Fruits",
-      "purchased": false
+      "purchased": true
     }
   ]
 }

@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { useAddItem } from '../hooks/useAddItem.mutation';
 import { useShopList } from '../hooks/useShopList.query';
+import { useRemoveItem } from '../hooks/useRemoveItem.mutation';
 import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
 import { useUpdatePurchaseStatus } from '../hooks/useUpdatePurchaseStatus.mutation';
 // components
@@ -16,6 +17,7 @@ import Input from '../components/ui/input/input';
 import Minus from '../components/icons/minus';
 import Modal from '../components/ui/modal/modal';
 import Button from '../components/ui/button/button';
+import Remove from '../components/icons/remove';
 import CustomSelect from '../components/ui/select/select';
 // utils
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,9 +26,12 @@ import styles from './App.module.scss';
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
+
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const { mutate: updateQuantity } = useUpdateQuantity();
+  const { mutate: removeItem } = useRemoveItem();
   const { mutate: updatePurchaseStatus } = useUpdatePurchaseStatus();
 
   const {
@@ -61,12 +66,22 @@ const App = () => {
     updatePurchaseStatus({ id, purchased: !purchase });
   };
 
-  const openModal = () => {
+  const openModal = (id: string) => () => {
+    setActiveItemId(id);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setActiveItemId(null);
+  };
+
+  const handleRemoveItem = () => {
+    if (activeItemId) {
+      removeItem({ id: activeItemId });
+      setActiveItemId(null);
+      setIsModalOpen(false);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -123,6 +138,9 @@ const App = () => {
                     onClick={handleUpdatePurchaseStatus(id, purchased)}>
                     <Done />
                   </Button>
+                  <Button className={styles.iconButton} onClick={openModal(id)}>
+                    <Remove />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -130,10 +148,10 @@ const App = () => {
         ))}
       </div>
 
-      <button onClick={openModal}>Open Modal</button>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h2>dialog test</h2>
-        <button onClick={closeModal}>Close Modal</button>
+        <h2>Are you sure you want to delete the item?</h2>
+        <Button onClick={handleRemoveItem}>Yes</Button>
+        <Button onClick={closeModal}>No</Button>
       </Modal>
     </div>
   );

@@ -7,17 +7,15 @@ import { shopListApi } from '../api/shop-list';
 // types
 import { ListItem } from '../types/list-item.type';
 
-interface UpdatePurchaseStatus {
+interface RemoveQuantity {
   id: string;
-  purchased: boolean;
 }
 
-export const useUpdatePurchaseStatus = () => {
+export const useRemoveItem = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ListItem, Error, UpdatePurchaseStatus>({
-    mutationFn: ({ id, purchased }) =>
-      shopListApi.updatePurchaseStatus(id, purchased),
+  return useMutation<ListItem, Error, RemoveQuantity>({
+    mutationFn: ({ id }) => shopListApi.removeItem(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SHOP_LIST] });
     },

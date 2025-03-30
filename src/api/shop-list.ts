@@ -35,4 +35,12 @@ export const shopListApi = {
       console.error('Error updating purchase status:', error);
     }
   },
+
+  removeItem: async (id: string) => {
+    try {
+      return (await instance.delete(`shopList/${id}`)).data;
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  },
 };
