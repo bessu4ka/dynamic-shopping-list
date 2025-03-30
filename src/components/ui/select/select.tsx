@@ -1,4 +1,6 @@
 import { useState, type FC } from 'react';
+// hooks
+import { useOutsideClick } from '../../../hooks/useOutsideClick';
 // types
 import type { CustomSelectProps } from './select.interface';
 // styles
@@ -11,6 +13,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useOutsideClick(() => setIsOpen(false));
 
   const handleSelectChange = (option: string) => () => {
     onChange(option);
@@ -18,7 +21,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={ref}>
       {label ? <label className={styles.label}>{label}</label> : null}
       <div className={styles.select} onClick={() => setIsOpen((prev) => !prev)}>
         <span>{value || 'Select category'}</span>
