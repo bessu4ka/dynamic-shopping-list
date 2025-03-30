@@ -1,0 +1,8 @@
+@import './variables';
+
+@mixin arrow {
+  border: solid $blue-dark;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+}

@@ -9,6 +9,7 @@ import { useShopList } from '../hooks/useShopList.query';
 // components
 import Input from '../components/ui/input/input';
 import Button from '../components/ui/button/button';
+import CustomSelect from '../components/ui/select/select';
 // utils
 import { zodResolver } from '@hookform/resolvers/zod';
 // styles
@@ -18,10 +19,10 @@ const App = () => {
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const {
-    register,
-    handleSubmit,
     reset,
     watch,
+    register,
+    handleSubmit,
     formState: { errors },
   } = useForm<addListItemFormType>({
     resolver: zodResolver(addListItemFormSchema),
@@ -53,13 +54,12 @@ const App = () => {
           label='quantity'
           error={errors.quantity?.message}
         />
-        <select {...register('category')}>
-          {categories?.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+        <CustomSelect
+          label='Category'
+          value={watch('category')}
+          options={categories}
+          onChange={(value) => reset({ ...watch(), category: value })}
+        />
         <Button disabled={isAddItemLoading}>Add</Button>
       </form>
       <div>

@@ -83,6 +83,27 @@
       "quantity": 22332,
       "category": "Fruits",
       "purchased": false
+    },
+    {
+      "id": 1743337064667,
+      "name": "asda",
+      "quantity": 11,
+      "category": "Vegetables",
+      "purchased": false
+    },
+    {
+      "id": 1743337103792,
+      "name": "213",
+      "quantity": 2,
+      "category": "Dairy",
+      "purchased": false
+    },
+    {
+      "id": 1743338075684,
+      "name": "asdasd",
+      "quantity": 1312,
+      "category": "Dairy",
+      "purchased": false
     }
   ]
 }
