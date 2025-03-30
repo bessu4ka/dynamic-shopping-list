@@ -3,26 +3,26 @@ import cn from 'classnames';
 // types
 import type { InputProps } from './input.interface.ts';
 // styles
-import styled from './input.module.scss';
+import styles from './input.module.scss';
 // hoc
 import { forwardRef } from 'react';
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ id, label, error, className, ...props }, ref) => {
     return (
-      <div className={styled.container}>
+      <div className={styles.container}>
         {label ? (
-          <label htmlFor={id} className={styled.label}>
+          <label htmlFor={id} className={styles.label}>
             {label}
           </label>
         ) : null}
         <input
           ref={ref}
-          className={cn(styled.input, className)}
+          className={cn(styles.input, className)}
           {...props}
           id={id}
         />
-        {error ? <span>{error}</span> : null}
+        {error ? <span className={styles.error}>{error}</span> : null}
       </div>
     );
   },

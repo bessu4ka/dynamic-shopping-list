@@ -1,25 +1,18 @@
 {
   "shopList": [
     {
-      "id": "1",
-      "name": "Apples",
-      "quantity": 0,
-      "category": "Fruits",
+      "id": "1743352704197",
+      "name": "asdas",
+      "quantity": 2,
+      "category": "sadas",
       "purchased": false
     },
     {
-      "id": "2",
-      "name": "Milk",
-      "quantity": 2,
-      "category": "Dairy",
-      "purchased": true
-    },
-    {
-      "id": "3",
-      "name": "Carrots",
-      "quantity": 9,
-      "category": "Vegetables",
-      "purchased": true
+      "id": "1743356362019",
+      "name": "ффів",
+      "quantity": 1,
+      "category": "sadas",
+      "purchased": false
     }
   ]
 }

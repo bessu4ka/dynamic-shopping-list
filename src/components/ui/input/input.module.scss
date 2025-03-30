@@ -5,7 +5,6 @@
   display: flex;
   row-gap: 4px;
   position: relative;
-  margin-bottom: 4px;
   flex-direction: column;
 
   .label {
@@ -33,5 +32,10 @@
 
   input[type='number'] {
     -moz-appearance: textfield;
+  }
+
+  .error {
+    color: $alert;
+    font-size: 12px;
   }
 }
