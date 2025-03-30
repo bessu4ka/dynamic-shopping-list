@@ -1,3 +1,4 @@
+// types
 import type { FC, SVGProps } from 'react';
 
 type MinusProps = SVGProps<SVGSVGElement>;

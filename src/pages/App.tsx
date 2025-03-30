@@ -7,8 +7,10 @@ import {
 import { useAddItem } from '../hooks/useAddItem.mutation';
 import { useShopList } from '../hooks/useShopList.query';
 import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
+import { useUpdatePurchaseStatus } from '../hooks/useUpdatePurchaseStatus.mutation';
 // components
 import Plus from '../components/icons/plus';
+import Done from '../components/icons/done';
 import Input from '../components/ui/input/input';
 import Minus from '../components/icons/minus';
 import Button from '../components/ui/button/button';
@@ -22,6 +24,8 @@ const App = () => {
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const { mutate: updateQuantity } = useUpdateQuantity();
+  const { mutate: updatePurchaseStatus } = useUpdatePurchaseStatus();
+
   const {
     reset,
     watch,
@@ -48,6 +52,10 @@ const App = () => {
     if (quantity > 0) {
       updateQuantity({ id, quantity: quantity - 1 });
     }
+  };
+
+  const handleUpdatePurchaseStatus = (id: string, purchase: boolean) => () => {
+    updatePurchaseStatus({ id, purchased: !purchase });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -99,6 +107,11 @@ const App = () => {
                     }}>
                     {name}
                   </span>
+                  <Button
+                    className={styles.iconButton}
+                    onClick={handleUpdatePurchaseStatus(id, purchased)}>
+                    <Done />
+                  </Button>
                 </div>
               </div>
             </div>

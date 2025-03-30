@@ -27,4 +27,12 @@ export const shopListApi = {
       console.error('Error updating quantity:', error);
     }
   },
+
+  updatePurchaseStatus: async (id: string, purchased: boolean) => {
+    try {
+      return (await instance.patch(`shopList/${id}`, { purchased })).data;
+    } catch (error) {
+      console.error('Error updating purchase status:', error);
+    }
+  },
 };
