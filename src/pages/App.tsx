@@ -1,19 +1,14 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
-  addListItemFormSchema,
-  type AddListItemFormType,
-} from '../schemas/add-list-item-form.schema';
-import {
   editNameFormSchema,
   type EditNameFormType,
 } from '../schemas/edit-name.schema';
 // hooks
-import { useAddItem } from '../hooks/use-add-item.mutation';
 import { useShopList } from '../hooks/use-shopList.query';
 import { useRemoveItem } from '../hooks/use-removeItem.mutation';
 import { useUpdateName } from '../hooks/use-update-name.mutation';
 import { useUpdateQuantity } from '../hooks/use-update-quantity';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import { useUpdatePurchaseStatus } from '../hooks/use-update-purchase-status.mutation';
 // components
 import Plus from '../components/icons/plus';
@@ -23,38 +18,26 @@ import Minus from '../components/icons/minus';
 import Modal from '../components/ui/modal/modal';
 import Button from '../components/ui/button/button';
 import Remove from '../components/icons/remove';
-import Switch from '../components/ui/switch/switch';
 import CustomSelect from '../components/ui/select/select';
 // utils
 import cn from 'classnames';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { reducer, initialState } from '../store/reducer';
+// types
+import type { AdjustQuantity } from 'types/list-item.type';
 // styles
 import styles from './App.module.scss';
+import AddItemForm from '../components/templates/add-item-form/add-item-form';
 
 const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeItemId, setActiveItemId] = useState<string | null>(null);
-  const [isShowInput, setIsShowInput] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<string>('All Categories');
+  const [{ activeItemId, editId, isModalOpen, selectedCategory }, dispatch] =
+    useReducer(reducer, initialState);
 
   const { data = [], error, isLoading } = useShopList();
-  const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const { mutate: updateQuantity } = useUpdateQuantity();
   const { mutate: removeItem } = useRemoveItem();
   const { mutate: updatePurchaseStatus } = useUpdatePurchaseStatus();
   const { mutate: updateName } = useUpdateName();
-
-  const {
-    reset,
-    watch,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AddListItemFormType>({
-    resolver: zodResolver(addListItemFormSchema),
-  });
 
   const {
     setValue: setValueName,
@@ -67,7 +50,7 @@ const App = () => {
 
   useEffect(() => {
     if (!data.length) {
-      setIsShowInput(true);
+      dispatch({ type: 'TOGGLE_SHOW_INPUT', value: true });
     }
   }, [data]);
 
@@ -80,67 +63,56 @@ const App = () => {
     }
   }, [editId, data, setValueName]);
 
-  const categories = [
-    'All Categories',
-    ...Array.from(new Set(data.map(({ category }) => category))),
-  ];
+  const categories = useMemo(
+    () => [
+      'All Categories',
+      ...Array.from(new Set(data.map(({ category }) => category))),
+    ],
+    [data],
+  );
 
   const filteredData =
     selectedCategory === 'All Categories'
       ? data
       : data.filter((item) => item.category === selectedCategory);
 
-  const onSubmit: SubmitHandler<AddListItemFormType> = (data) =>
-    addItem(data, {
-      onSuccess: () =>
-        reset({
-          name: '',
-          quantity: undefined,
-          category: isShowInput ? '' : watch('category'),
-        }),
-    });
-
   const onSubmitName: SubmitHandler<EditNameFormType> = ({ name }) => {
     if (editId) {
       updateName({ name, id: editId });
-      setEditId(null);
     }
+    dispatch({ type: 'SET_EDIT_ID', id: null });
   };
 
-  const handleIncrease = (id: string, quantity: number) => {
-    updateQuantity({ id, quantity: quantity + 1 });
-  };
-
-  const handleDecrease = (id: string, quantity: number) => {
-    if (quantity > 0) {
-      updateQuantity({ id, quantity: quantity - 1 });
-    }
-  };
+  const handleAdjustQuantity =
+    ({ id, quantity, quantityAdjustment }: AdjustQuantity) =>
+    () => {
+      const newQuantity = quantity + quantityAdjustment;
+      if (newQuantity >= 0) {
+        updateQuantity({ id, quantity: newQuantity });
+      }
+    };
 
   const handleUpdatePurchaseStatus = (id: string, purchase: boolean) => () => {
     updatePurchaseStatus({ id, purchased: !purchase });
   };
 
   const openModal = (id: string) => () => {
-    setActiveItemId(id);
-    setIsModalOpen(true);
+    dispatch({ type: 'OPEN_MODAL', id });
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setActiveItemId(null);
+    dispatch({ type: 'CLOSE_MODAL' });
   };
 
   const handleRemoveItem = () => {
     if (activeItemId) {
       removeItem({ id: activeItemId });
-      setActiveItemId(null);
-      setIsModalOpen(false);
+      dispatch({ type: 'CLOSE_MODAL' });
     }
   };
 
   const handleEditName = (id: string) => () => {
-    setEditId(id);
+    dispatch({ type: 'SET_EDIT_ID', id });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -150,57 +122,15 @@ const App = () => {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <h1>Shopping List</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.nameAndQuantity}>
-            <Input
-              id='name'
-              {...register('name')}
-              label='name of product'
-              error={errors.name?.message}
-            />
-            <Input
-              id='quantity'
-              type='number'
-              {...register('quantity', { valueAsNumber: true })}
-              label='quantity'
-              error={errors.quantity?.message}
-            />
-          </div>
-          <div className={styles.category}>
-            <div className={styles.switchWrapper}>
-              <span>{isShowInput ? 'select' : 'input'}</span>
-              <Switch
-                label='create new category or select'
-                checked={isShowInput}
-                isDisabled={!data.length}
-                onChange={setIsShowInput}
-              />
-            </div>
-            {!isShowInput && (
-              <CustomSelect
-                label='select category'
-                value={watch('category')}
-                options={categories}
-                onChange={(value) => reset({ ...watch(), category: value })}
-              />
-            )}
-            {isShowInput && (
-              <Input
-                id='create new category'
-                {...register('category')}
-                label='create new category'
-                error={errors.category?.message}
-              />
-            )}
-          </div>
-          <Button disabled={isAddItemLoading}>Add</Button>
-        </form>
+        <AddItemForm categories={categories} />
         {!!data.length && (
           <CustomSelect
             label='filter by category'
             value={selectedCategory}
             options={categories}
-            onChange={(value) => setSelectedCategory(value)}
+            onChange={(value) =>
+              dispatch({ type: 'SET_CATEGORY', category: value })
+            }
           />
         )}
         <ul>
@@ -210,13 +140,21 @@ const App = () => {
                 <Button
                   aria-label='minus'
                   className={styles.iconButton}
-                  onClick={() => handleDecrease(id, quantity)}>
+                  onClick={handleAdjustQuantity({
+                    id,
+                    quantity,
+                    quantityAdjustment: -1,
+                  })}>
                   <Minus />
                 </Button>
                 <Button
                   aria-label='plus'
                   className={styles.iconButton}
-                  onClick={() => handleIncrease(id, quantity)}>
+                  onClick={handleAdjustQuantity({
+                    id,
+                    quantity,
+                    quantityAdjustment: 1,
+                  })}>
                   <Plus />
                 </Button>
                 <span>({quantity})</span>
