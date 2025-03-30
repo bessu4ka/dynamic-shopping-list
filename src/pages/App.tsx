@@ -4,6 +4,7 @@ import {
   type addListItemFormType,
 } from '../schemas/add-list-item-form.schema';
 // hooks
+import { useState } from 'react';
 import { useAddItem } from '../hooks/useAddItem.mutation';
 import { useShopList } from '../hooks/useShopList.query';
 import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
@@ -13,6 +14,7 @@ import Plus from '../components/icons/plus';
 import Done from '../components/icons/done';
 import Input from '../components/ui/input/input';
 import Minus from '../components/icons/minus';
+import Modal from '../components/ui/modal/modal';
 import Button from '../components/ui/button/button';
 import CustomSelect from '../components/ui/select/select';
 // utils
@@ -21,6 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './App.module.scss';
 
 const App = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const { mutate: updateQuantity } = useUpdateQuantity();
@@ -56,6 +59,14 @@ const App = () => {
 
   const handleUpdatePurchaseStatus = (id: string, purchase: boolean) => () => {
     updatePurchaseStatus({ id, purchased: !purchase });
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -118,6 +129,12 @@ const App = () => {
           </div>
         ))}
       </div>
+
+      <button onClick={openModal}>Open Modal</button>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>dialog test</h2>
+        <button onClick={closeModal}>Close Modal</button>
+      </Modal>
     </div>
   );
 };
