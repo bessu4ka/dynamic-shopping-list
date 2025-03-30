@@ -17,16 +17,17 @@
     background-color: $primary-btn-hover;
   }
 
-  &:disabled {
-    color: $primary-btn-text-disabled;
-    background-color: $primary-btn-bg-disabled;
-  }
-
   &:active {
     background-color: $primary-btn-hover;
   }
 
   &:focus {
     background-color: $primary-btn-hover;
+  }
+
+  &:disabled {
+    color: $primary-btn-text-disabled;
+    background-color: $primary-btn-bg-disabled;
+    cursor: auto;
   }
 }
