@@ -18,6 +18,7 @@ import Minus from '../components/icons/minus';
 import Modal from '../components/ui/modal/modal';
 import Button from '../components/ui/button/button';
 import Remove from '../components/icons/remove';
+import Switch from '../components/ui/switch/switch';
 import CustomSelect from '../components/ui/select/select';
 // utils
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,6 +28,7 @@ import styles from './App.module.scss';
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
 
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
@@ -90,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h1>Shopping List</h1>
+      <Switch checked={isChecked} onChange={setIsChecked} />
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Input
           {...register('name')}
@@ -107,6 +110,11 @@ const App = () => {
           value={watch('category')}
           options={categories}
           onChange={(value) => reset({ ...watch(), category: value })}
+        />
+        <Input
+          {...register('category')}
+          label='category'
+          error={errors.quantity?.message}
         />
         <Button disabled={isAddItemLoading}>Add</Button>
       </form>

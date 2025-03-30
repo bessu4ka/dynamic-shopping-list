@@ -1,0 +1,46 @@
+@import '@scss';
+
+.switch {
+  width: 50px;
+  height: 30px;
+  display: inline-block;
+  position: relative;
+
+  > input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .slider {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    position: absolute;
+    transition: 0.4s;
+    border-radius: 30px;
+    background-color: $svg-hover;
+  }
+
+  .slider:before {
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    transition: 0.4s;
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  input:checked + .slider {
+    background-color: $primary;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+}
