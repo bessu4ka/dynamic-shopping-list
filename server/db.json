@@ -3,35 +3,84 @@
     {
       "id": 1,
       "name": "Apples",
-      "quantity": "5",
+      "quantity": 5,
       "category": "Fruits",
       "purchased": false
     },
     {
       "id": 2,
       "name": "Milk",
-      "quantity": "1",
+      "quantity": 1,
       "category": "Dairy",
       "purchased": true
     },
     {
       "id": 3,
       "name": "Carrots",
-      "quantity": "3",
+      "quantity": 3,
       "category": "Vegetables",
       "purchased": false
     },
     {
-      "id": 1743334752441,
-      "name": "asd",
+      "id": 1743335859240,
+      "name": "asda",
       "quantity": "1",
       "category": "Fruits",
       "purchased": false
     },
     {
-      "id": 1743334898024,
+      "id": 1743335863342,
+      "name": "asdas",
+      "quantity": "1",
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743335881152,
+      "name": "asxcdas",
+      "quantity": "asdasd",
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743336322106,
+      "name": "qqwwq",
+      "quantity": 1,
+      "category": "Dairy",
+      "purchased": false
+    },
+    {
+      "id": 1743336472404,
+      "name": "asdasd",
+      "quantity": 12,
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743336478948,
+      "name": "asdasd",
+      "quantity": 1,
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743336532633,
+      "name": "asda",
+      "quantity": 1,
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743336538121,
       "name": "asd",
-      "quantity": "aa",
+      "quantity": 12,
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 1743336544807,
+      "name": "sdasd",
+      "quantity": 22332,
       "category": "Fruits",
       "purchased": false
     }

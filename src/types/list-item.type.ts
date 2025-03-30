@@ -1,7 +1,7 @@
 export interface ListItem {
   id: number;
   name: string;
-  quantity: string;
+  quantity: number;
   category: string;
   purchased: boolean;
 }

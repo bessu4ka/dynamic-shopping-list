@@ -17,13 +17,23 @@ import styles from './App.module.scss';
 const App = () => {
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
-  const { register, handleSubmit } = useForm<addListItemFormType>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<addListItemFormType>({
     resolver: zodResolver(addListItemFormSchema),
   });
 
   const categories = Array.from(new Set(data.map(({ category }) => category)));
 
-  const onSubmit: SubmitHandler<addListItemFormType> = (data) => addItem(data);
+  const onSubmit: SubmitHandler<addListItemFormType> = (data) =>
+    addItem(data, {
+      onSuccess: () =>
+        reset({ name: '', quantity: 0, category: watch('category') }),
+    });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Something went wrong...</div>;
@@ -32,8 +42,17 @@ const App = () => {
     <div>
       <h1>Shopping List</h1>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <Input {...register('name')} />
-        <Input {...register('quantity')} />
+        <Input
+          {...register('name')}
+          label='name of product'
+          error={errors.name?.message}
+        />
+        <Input
+          type='number'
+          {...register('quantity', { valueAsNumber: true })}
+          label='quantity'
+          error={errors.quantity?.message}
+        />
         <select {...register('category')}>
           {categories?.map((cat) => (
             <option key={cat} value={cat}>
@@ -50,7 +69,7 @@ const App = () => {
               <div>
                 <span
                   style={{
-                    textDecoration: `${purchased ? 'none' : 'line-through'}`,
+                    textDecoration: `${purchased ? 'line-through' : 'none'}`,
                   }}>
                   {name} ({quantity})
                 </span>

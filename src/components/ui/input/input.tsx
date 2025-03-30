@@ -8,7 +8,7 @@ import styled from './input.module.scss';
 import { forwardRef } from 'react';
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ id, label, className, ...props }, ref) => {
+  ({ id, label, error, className, ...props }, ref) => {
     return (
       <div className={styled.container}>
         {label ? (
@@ -22,6 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
           id={id}
         />
+        {error ? <span>{error}</span> : null}
       </div>
     );
   },
