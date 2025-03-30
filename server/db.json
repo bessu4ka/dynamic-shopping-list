@@ -1,18 +1,74 @@
 {
   "shopList": [
     {
-      "id": "1743352704197",
-      "name": "asdas",
+      "id": "1",
+      "name": "Milk",
       "quantity": 2,
-      "category": "sadas",
+      "category": "Dairy",
       "purchased": false
     },
     {
-      "id": "1743356362019",
-      "name": "ффів",
+      "id": "2",
+      "name": "Bread",
       "quantity": 1,
-      "category": "sadas",
+      "category": "Bakery",
+      "purchased": true
+    },
+    {
+      "id": "3",
+      "name": "Apples",
+      "quantity": 6,
+      "category": "Fruits",
       "purchased": false
+    },
+    {
+      "id": "4",
+      "name": "Chicken",
+      "quantity": 1,
+      "category": "Meat",
+      "purchased": false
+    },
+    {
+      "id": "5",
+      "name": "Eggs",
+      "quantity": 12,
+      "category": "Dairy",
+      "purchased": true
+    },
+    {
+      "id": "6",
+      "name": "Rice",
+      "quantity": 3,
+      "category": "Grains",
+      "purchased": false
+    },
+    {
+      "id": "7",
+      "name": "Tomatoes",
+      "quantity": 4,
+      "category": "Vegetables",
+      "purchased": true
+    },
+    {
+      "id": "8",
+      "name": "Cheese",
+      "quantity": 1,
+      "category": "Dairy",
+      "purchased": false
+    },
+    {
+      "id": "9",
+      "name": "Potatoes",
+      "quantity": 5,
+      "category": "Vegetables",
+      "purchased": false
+    },
+    {
+      "id": "10",
+      "name": "Orange Juice",
+      "quantity": 2,
+      "category": "Beverages",
+      "purchased": true
     }
   ]
 }
