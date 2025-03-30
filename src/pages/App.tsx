@@ -1,21 +1,17 @@
 import { useState } from 'react';
 import Button from '../components/ui/button/button';
 import Input from '../components/ui/input/input';
+import { useShopList } from '../hooks/useShopList.query';
+import type { ListItem } from '../types/list-item.type';
 
 // TODO mock data, need upd
 const categories = ['Fruits', 'Dairy', 'Vegetables', 'Others'];
 
-interface Item {
-  id: number;
-  name: string;
-  quantity: string;
-  category: string;
-  purchased: boolean;
-}
-
 const App = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [newItem, setNewItem] = useState<Item>({
+  const { data, error, isLoading } = useShopList();
+
+  // const [items, setItems] = useState<ListItem[]>([]);
+  const [newItem, setNewItem] = useState<ListItem>({
     id: 0,
     name: '',
     quantity: '',
@@ -24,32 +20,40 @@ const App = () => {
   });
   const [filter, setFilter] = useState('All');
 
-  const addItem = () => {
-    setItems([...items, { ...newItem, id: Date.now(), purchased: false }]);
+  // const addItem = () => {
+  //   setItems([...items, { ...newItem, id: Date.now(), purchased: false }]);
 
-    setNewItem({
-      id: Date.now(),
-      name: '',
-      quantity: '',
-      category: 'Fruits',
-      purchased: false,
-    });
-  };
+  //   setNewItem({
+  //     id: Date.now(),
+  //     name: '',
+  //     quantity: '',
+  //     category: 'Fruits',
+  //     purchased: false,
+  //   });
+  // };
 
-  const removeItem = (id: number) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
+  // const removeItem = (id: number) => {
+  //   setItems(items.filter((item) => item.id !== id));
+  // };
 
-  const togglePurchased = (id: number) => {
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, purchased: !item.purchased } : item,
-      ),
-    );
-  };
+  // const togglePurchased = (id: number) => {
+  //   setItems(
+  //     items.map((item) =>
+  //       item.id === id ? { ...item, purchased: !item.purchased } : item,
+  //     ),
+  //   );
+  // };
 
   const filteredItems =
-    filter === 'All' ? items : items.filter((item) => item.category === filter);
+    filter === 'All' ? data : data.filter((item) => item.category === filter);
+
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
+  if (error) {
+    <div>something went wrong...</div>;
+  }
 
   return (
     <div>
@@ -80,7 +84,7 @@ const App = () => {
           ))}
         </select>
 
-        <button onClick={addItem}>Add</button>
+        {/* <button onClick={addItem}>Add</button> */}
       </div>
 
       <select value={filter} onChange={(e) => setFilter(e.target.value)}>
@@ -107,8 +111,8 @@ const App = () => {
                 </span>
               </div>
               <div>
-                <button onClick={() => togglePurchased(item.id)}>done</button>
-                <button onClick={() => removeItem(item.id)}>remove</button>
+                {/* <button onClick={() => togglePurchased(item.id)}>done</button>
+                <button onClick={() => removeItem(item.id)}>remove</button> */}
               </div>
             </div>
           </div>

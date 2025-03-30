@@ -1,0 +1,25 @@
+{
+  "shopList": [
+    {
+      "id": 1,
+      "name": "Apples",
+      "quantity": "5",
+      "category": "Fruits",
+      "purchased": false
+    },
+    {
+      "id": 2,
+      "name": "Milk",
+      "quantity": "1",
+      "category": "Dairy",
+      "purchased": true
+    },
+    {
+      "id": 3,
+      "name": "Carrots",
+      "quantity": "3",
+      "category": "Vegetables",
+      "purchased": false
+    }
+  ]
+}
