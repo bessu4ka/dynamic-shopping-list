@@ -1,15 +1,20 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   addListItemFormSchema,
-  type addListItemFormType,
+  type AddListItemFormType,
 } from '../schemas/add-list-item-form.schema';
+import {
+  editNameFormSchema,
+  type EditNameFormType,
+} from '../schemas/edit-name.schema';
 // hooks
-import { useAddItem } from '../hooks/useAddItem.mutation';
-import { useShopList } from '../hooks/useShopList.query';
-import { useRemoveItem } from '../hooks/useRemoveItem.mutation';
-import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
+import { useAddItem } from '../hooks/use-add-item.mutation';
+import { useShopList } from '../hooks/use-shopList.query';
+import { useRemoveItem } from '../hooks/use-removeItem.mutation';
+import { useUpdateName } from '../hooks/use-update-name.mutation';
+import { useUpdateQuantity } from '../hooks/use-update-quantity';
 import { useEffect, useState } from 'react';
-import { useUpdatePurchaseStatus } from '../hooks/useUpdatePurchaseStatus.mutation';
+import { useUpdatePurchaseStatus } from '../hooks/use-update-purchase-status.mutation';
 // components
 import Plus from '../components/icons/plus';
 import Done from '../components/icons/done';
@@ -30,18 +35,16 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
   const [isShowInput, setIsShowInput] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>('All Categories');
 
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
   const { mutate: updateQuantity } = useUpdateQuantity();
   const { mutate: removeItem } = useRemoveItem();
   const { mutate: updatePurchaseStatus } = useUpdatePurchaseStatus();
-
-  useEffect(() => {
-    if (!data.length) {
-      setIsShowInput(true);
-    }
-  }, [data]);
+  const { mutate: updateName } = useUpdateName();
 
   const {
     reset,
@@ -49,13 +52,45 @@ const App = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<addListItemFormType>({
+  } = useForm<AddListItemFormType>({
     resolver: zodResolver(addListItemFormSchema),
   });
 
-  const categories = Array.from(new Set(data.map(({ category }) => category)));
+  const {
+    setValue: setValueName,
+    register: registerName,
+    handleSubmit: handleSubmitName,
+    formState: { errors: errorsName },
+  } = useForm<EditNameFormType>({
+    resolver: zodResolver(editNameFormSchema),
+  });
 
-  const onSubmit: SubmitHandler<addListItemFormType> = (data) =>
+  useEffect(() => {
+    if (!data.length) {
+      setIsShowInput(true);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (editId) {
+      const item = data.find((item) => item.id === editId);
+      if (item) {
+        setValueName('name', item.name);
+      }
+    }
+  }, [editId, data, setValueName]);
+
+  const categories = [
+    'All Categories',
+    ...Array.from(new Set(data.map(({ category }) => category))),
+  ];
+
+  const filteredData =
+    selectedCategory === 'All Categories'
+      ? data
+      : data.filter((item) => item.category === selectedCategory);
+
+  const onSubmit: SubmitHandler<AddListItemFormType> = (data) =>
     addItem(data, {
       onSuccess: () =>
         reset({
@@ -64,6 +99,13 @@ const App = () => {
           category: isShowInput ? '' : watch('category'),
         }),
     });
+
+  const onSubmitName: SubmitHandler<EditNameFormType> = ({ name }) => {
+    if (editId) {
+      updateName({ name, id: editId });
+      setEditId(null);
+    }
+  };
 
   const handleIncrease = (id: string, quantity: number) => {
     updateQuantity({ id, quantity: quantity + 1 });
@@ -95,6 +137,10 @@ const App = () => {
       setActiveItemId(null);
       setIsModalOpen(false);
     }
+  };
+
+  const handleEditName = (id: string) => () => {
+    setEditId(id);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -149,8 +195,16 @@ const App = () => {
           </div>
           <Button disabled={isAddItemLoading}>Add</Button>
         </form>
+        {!!data.length && (
+          <CustomSelect
+            label='filter by category'
+            value={selectedCategory}
+            options={categories}
+            onChange={(value) => setSelectedCategory(value)}
+          />
+        )}
         <ul>
-          {data.map(({ id, name, purchased, quantity }) => (
+          {filteredData.map(({ id, name, purchased, quantity }) => (
             <li key={id}>
               <div className={styles.buttonsWrapper}>
                 <Button
@@ -167,7 +221,21 @@ const App = () => {
                 </Button>
                 <span>({quantity})</span>
               </div>
-              <span className={cn({ [styles.text]: purchased })}>{name}</span>
+              {editId === id ? (
+                <form onSubmit={handleSubmitName(onSubmitName)}>
+                  <Input
+                    {...registerName('name')}
+                    id='register name'
+                    error={errorsName.name?.message}
+                  />
+                </form>
+              ) : (
+                <span
+                  onClick={purchased ? undefined : handleEditName(id)}
+                  className={cn({ [styles.text]: purchased })}>
+                  {name}
+                </span>
+              )}
               <div className={cn(styles.buttonsWrapper, styles.manageButtons)}>
                 <Button
                   aria-label='toggle status'

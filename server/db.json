@@ -1,17 +1,17 @@
 {
   "shopList": [
     {
-      "id": "1743352704197",
-      "name": "asdas",
-      "quantity": 2,
-      "category": "sadas",
+      "id": "1743360634403",
+      "name": "test",
+      "quantity": 1,
+      "category": "cat 1",
       "purchased": false
     },
     {
-      "id": "1743356362019",
-      "name": "ффів",
-      "quantity": 1,
-      "category": "sadas",
+      "id": "1743360665209",
+      "name": "test 2",
+      "quantity": 2,
+      "category": "cat 2",
       "purchased": false
     }
   ]

@@ -6,12 +6,12 @@ import { SHOP_LIST } from '../constants/query-keys';
 import { shopListApi } from '../api/shop-list';
 // types
 import type { ListItem } from '../types/list-item.type';
-import type { addListItemFormType } from '../schemas/add-list-item-form.schema';
+import type { AddListItemFormType } from '../schemas/add-list-item-form.schema';
 
 export const useAddItem = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ListItem, Error, addListItemFormType>({
+  return useMutation<ListItem, Error, AddListItemFormType>({
     mutationFn: async (item) => {
       return await shopListApi.addItem({
         ...item,
