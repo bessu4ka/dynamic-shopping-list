@@ -8,10 +8,31 @@
       "purchased": false
     },
     {
-      "id": "1743360665209",
-      "name": "test 2",
+      "id": "1743361903127",
+      "name": "asda",
+      "quantity": 1,
+      "category": "asd",
+      "purchased": false
+    },
+    {
+      "id": "1743364474854",
+      "name": "asd",
+      "quantity": 1,
+      "category": "cat 1",
+      "purchased": false
+    },
+    {
+      "id": "1743364609060",
+      "name": "test",
+      "quantity": 1,
+      "category": "cat 1",
+      "purchased": false
+    },
+    {
+      "id": "1743364626586",
+      "name": "test",
       "quantity": 2,
-      "category": "cat 2",
+      "category": "cat 11",
       "purchased": false
     }
   ]
