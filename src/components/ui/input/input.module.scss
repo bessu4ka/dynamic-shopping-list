@@ -1,0 +1,27 @@
+@import '@scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  row-gap: 4px;
+  position: relative;
+  margin-bottom: 4px;
+  flex-direction: column;
+
+  .label {
+    width: fit-content;
+  }
+
+  .input {
+    height: 30px;
+    padding: 8px;
+    font-size: 13px;
+    background: $input-bg;
+    border-radius: 4px;
+
+    &:focus {
+      background: $input-focus;
+      border: 1px solid $blue-dark;
+    }
+  }
+}

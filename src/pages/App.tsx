@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Button from '../components/ui/button/button';
+import Input from '../components/ui/input/input';
 
 // TODO mock data, need upd
 const categories = ['Fruits', 'Dairy', 'Vegetables', 'Others'];
@@ -116,6 +117,8 @@ const App = () => {
 
       {/* UI-KIT */}
       <Button>hello</Button>
+      <Button disabled>disabled</Button>
+      <Input placeholder='your text' label={<span>label</span>} id='test' />
     </div>
   );
 };
