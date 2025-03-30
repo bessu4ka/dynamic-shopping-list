@@ -15,7 +15,7 @@ export const useAddItem = () => {
     mutationFn: async (item) => {
       return await shopListApi.addItem({
         ...item,
-        id: Date.now(),
+        id: String(Date.now()),
         purchased: false,
       });
     },

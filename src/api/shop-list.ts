@@ -19,4 +19,12 @@ export const shopListApi = {
       console.error('Error adding item:', error);
     }
   },
+
+  updateQuantity: async (id: string, quantity: number) => {
+    try {
+      return (await instance.patch(`shopList/${id}`, { quantity })).data;
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
+  },
 };

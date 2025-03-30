@@ -1,0 +1,24 @@
+@import '@scss';
+
+.element {
+  gap: 6px;
+  display: flex;
+  align-items: center;
+
+  .iconButton {
+    background-color: transparent;
+    padding: 0px;
+    border: none;
+
+    > svg {
+      transition: all 0.3s;
+      border-radius: 8px;
+      width: 30px;
+
+      &:hover {
+        transition: all 0.3s;
+        background-color: $svg-hover;
+      }
+    }
+  }
+}

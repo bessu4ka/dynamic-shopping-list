@@ -1,108 +1,24 @@
 {
   "shopList": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Apples",
-      "quantity": 5,
+      "quantity": 0,
       "category": "Fruits",
       "purchased": false
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Milk",
-      "quantity": 1,
+      "quantity": 2,
       "category": "Dairy",
       "purchased": true
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Carrots",
-      "quantity": 3,
+      "quantity": 9,
       "category": "Vegetables",
-      "purchased": false
-    },
-    {
-      "id": 1743335859240,
-      "name": "asda",
-      "quantity": "1",
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743335863342,
-      "name": "asdas",
-      "quantity": "1",
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743335881152,
-      "name": "asxcdas",
-      "quantity": "asdasd",
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743336322106,
-      "name": "qqwwq",
-      "quantity": 1,
-      "category": "Dairy",
-      "purchased": false
-    },
-    {
-      "id": 1743336472404,
-      "name": "asdasd",
-      "quantity": 12,
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743336478948,
-      "name": "asdasd",
-      "quantity": 1,
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743336532633,
-      "name": "asda",
-      "quantity": 1,
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743336538121,
-      "name": "asd",
-      "quantity": 12,
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743336544807,
-      "name": "sdasd",
-      "quantity": 22332,
-      "category": "Fruits",
-      "purchased": false
-    },
-    {
-      "id": 1743337064667,
-      "name": "asda",
-      "quantity": 11,
-      "category": "Vegetables",
-      "purchased": false
-    },
-    {
-      "id": 1743337103792,
-      "name": "213",
-      "quantity": 2,
-      "category": "Dairy",
-      "purchased": false
-    },
-    {
-      "id": 1743338075684,
-      "name": "asdasd",
-      "quantity": 1312,
-      "category": "Dairy",
       "purchased": false
     }
   ]

@@ -6,8 +6,11 @@ import {
 // hooks
 import { useAddItem } from '../hooks/useAddItem.mutation';
 import { useShopList } from '../hooks/useShopList.query';
+import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
 // components
+import Plus from '../components/icons/plus';
 import Input from '../components/ui/input/input';
+import Minus from '../components/icons/minus';
 import Button from '../components/ui/button/button';
 import CustomSelect from '../components/ui/select/select';
 // utils
@@ -18,6 +21,7 @@ import styles from './App.module.scss';
 const App = () => {
   const { data = [], error, isLoading } = useShopList();
   const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
+  const { mutate: updateQuantity } = useUpdateQuantity();
   const {
     reset,
     watch,
@@ -35,6 +39,16 @@ const App = () => {
       onSuccess: () =>
         reset({ name: '', quantity: 0, category: watch('category') }),
     });
+
+  const handleIncrease = (id: string, quantity: number) => {
+    updateQuantity({ id, quantity: quantity + 1 });
+  };
+
+  const handleDecrease = (id: string, quantity: number) => {
+    if (quantity > 0) {
+      updateQuantity({ id, quantity: quantity - 1 });
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Something went wrong...</div>;
@@ -67,12 +81,25 @@ const App = () => {
           <div key={id}>
             <div style={{ display: 'flex', gap: '10px' }}>
               <div>
-                <span
-                  style={{
-                    textDecoration: `${purchased ? 'line-through' : 'none'}`,
-                  }}>
-                  {name} ({quantity})
-                </span>
+                <div className={styles.element}>
+                  <Button
+                    className={styles.iconButton}
+                    onClick={() => handleDecrease(id, quantity)}>
+                    <Minus />
+                  </Button>
+                  <Button
+                    className={styles.iconButton}
+                    onClick={() => handleIncrease(id, quantity)}>
+                    <Plus />
+                  </Button>
+                  <span>({quantity})</span>
+                  <span
+                    style={{
+                      textDecoration: `${purchased ? 'line-through' : 'none'}`,
+                    }}>
+                    {name}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
