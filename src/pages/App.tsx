@@ -1,128 +1,64 @@
-import { useState } from 'react';
-import Button from '../components/ui/button/button';
-import Input from '../components/ui/input/input';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  addListItemFormSchema,
+  type addListItemFormType,
+} from '../schemas/add-list-item-form.schema';
+// hooks
+import { useAddItem } from '../hooks/useAddItem.mutation';
 import { useShopList } from '../hooks/useShopList.query';
-import type { ListItem } from '../types/list-item.type';
-
-// TODO mock data, need upd
-const categories = ['Fruits', 'Dairy', 'Vegetables', 'Others'];
+// components
+import Input from '../components/ui/input/input';
+import Button from '../components/ui/button/button';
+// utils
+import { zodResolver } from '@hookform/resolvers/zod';
+// styles
+import styles from './App.module.scss';
 
 const App = () => {
-  const { data, error, isLoading } = useShopList();
-
-  // const [items, setItems] = useState<ListItem[]>([]);
-  const [newItem, setNewItem] = useState<ListItem>({
-    id: 0,
-    name: '',
-    quantity: '',
-    category: 'Fruits',
-    purchased: false,
+  const { data = [], error, isLoading } = useShopList();
+  const { mutate: addItem, isPending: isAddItemLoading } = useAddItem();
+  const { register, handleSubmit } = useForm<addListItemFormType>({
+    resolver: zodResolver(addListItemFormSchema),
   });
-  const [filter, setFilter] = useState('All');
 
-  // const addItem = () => {
-  //   setItems([...items, { ...newItem, id: Date.now(), purchased: false }]);
+  const categories = Array.from(new Set(data.map(({ category }) => category)));
 
-  //   setNewItem({
-  //     id: Date.now(),
-  //     name: '',
-  //     quantity: '',
-  //     category: 'Fruits',
-  //     purchased: false,
-  //   });
-  // };
+  const onSubmit: SubmitHandler<addListItemFormType> = (data) => addItem(data);
 
-  // const removeItem = (id: number) => {
-  //   setItems(items.filter((item) => item.id !== id));
-  // };
-
-  // const togglePurchased = (id: number) => {
-  //   setItems(
-  //     items.map((item) =>
-  //       item.id === id ? { ...item, purchased: !item.purchased } : item,
-  //     ),
-  //   );
-  // };
-
-  const filteredItems =
-    filter === 'All' ? data : data.filter((item) => item.category === filter);
-
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-
-  if (error) {
-    <div>something went wrong...</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Something went wrong...</div>;
 
   return (
     <div>
       <h1>Shopping List</h1>
-      <div>
-        <input
-          placeholder='Item name'
-          value={newItem.name}
-          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-        />
-
-        <input
-          type='number'
-          placeholder='Qty'
-          value={newItem.quantity}
-          onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-        />
-
-        <select
-          value={newItem.category}
-          onChange={(e) =>
-            setNewItem({ ...newItem, category: e.target.value })
-          }>
-          {categories.map((cat) => (
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <Input {...register('name')} />
+        <Input {...register('quantity')} />
+        <select {...register('category')}>
+          {categories?.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
           ))}
         </select>
-
-        {/* <button onClick={addItem}>Add</button> */}
-      </div>
-
-      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-        <option value='All'>All</option>
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
-
+        <Button disabled={isAddItemLoading}>Add</Button>
+      </form>
       <div>
-        {filteredItems.map((item) => (
-          <div key={item.id}>
+        {data.map(({ id, name, purchased, quantity }) => (
+          <div key={id}>
             <div style={{ display: 'flex', gap: '10px' }}>
               <div>
                 <span
                   style={{
-                    textDecoration: `${
-                      item.purchased ? 'none' : 'line-through'
-                    }`,
+                    textDecoration: `${purchased ? 'none' : 'line-through'}`,
                   }}>
-                  {item.name}({item.quantity})
+                  {name} ({quantity})
                 </span>
-              </div>
-              <div>
-                {/* <button onClick={() => togglePurchased(item.id)}>done</button>
-                <button onClick={() => removeItem(item.id)}>remove</button> */}
               </div>
             </div>
           </div>
         ))}
       </div>
-
-      {/* UI-KIT */}
-      <Button>hello</Button>
-      <Button disabled>disabled</Button>
-      <Input placeholder='your text' label={<span>label</span>} id='test' />
     </div>
   );
 };
