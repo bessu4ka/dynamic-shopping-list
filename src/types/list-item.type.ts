@@ -5,3 +5,9 @@ export interface ListItem {
   category: string;
   purchased: boolean;
 }
+
+export interface QuantityChangeParams {
+  id: string;
+  quantity: number;
+  action: 'increase' | 'decrease';
+}

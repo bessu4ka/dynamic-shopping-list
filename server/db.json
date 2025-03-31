@@ -1,13 +1,6 @@
 {
   "shopList": [
     {
-      "id": "5",
-      "name": "Eggs",
-      "quantity": 10,
-      "category": "Dairy",
-      "purchased": true
-    },
-    {
       "id": "6",
       "name": "Rice",
       "quantity": 3,

@@ -5,17 +5,17 @@ import {
 } from '../schemas/update-name-form.schema';
 import {
   addListItemFormSchema,
-  type addListItemFormType,
+  type AddListItemFormType,
 } from '../schemas/add-list-item-form.schema';
 // hooks
-import { useAddItem } from '../hooks/useAddItem.mutation';
-import { useShopList } from '../hooks/useShopList.query';
-import { useUpdateName } from '../hooks/useUpdateName.mutation';
-import { useRemoveItem } from '../hooks/useRemoveItem.mutation';
-import { useOutsideClick } from '../hooks/useOutsideClick';
-import { useUpdateQuantity } from '../hooks/useUpdateQuantity';
+import { useAddItem } from '../hooks/use-add-item.mutation';
+import { useShopList } from '../hooks/use-shop-list.query';
+import { useUpdateName } from '../hooks/use-update-name.mutation';
+import { useRemoveItem } from '../hooks/use-remove-item.mutation';
+import { useOutsideClick } from '../hooks/use-outside-click';
+import { useUpdateQuantity } from '../hooks/use-update-quantity';
 import { useEffect, useState } from 'react';
-import { useUpdatePurchaseStatus } from '../hooks/useUpdatePurchaseStatus.mutation';
+import { useUpdatePurchaseStatus } from '../hooks/use-update-purchase-status.mutation';
 // components
 import Plus from '../components/icons/plus';
 import Done from '../components/icons/done';
@@ -30,7 +30,7 @@ import CustomSelect from '../components/ui/select/select';
 import cn from 'classnames';
 import { zodResolver } from '@hookform/resolvers/zod';
 // types
-import type { ListItem } from '../types/list-item.type';
+import type { ListItem, QuantityChangeParams } from '../types/list-item.type';
 // styles
 import styles from './App.module.scss';
 
@@ -50,12 +50,6 @@ const App = () => {
   const { mutate: updatePurchaseStatus } = useUpdatePurchaseStatus();
   const { mutate: updateName } = useUpdateName();
 
-  useEffect(() => {
-    if (!data.length) {
-      setIsShowInput(true);
-    }
-  }, [data]);
-
   const {
     reset,
     watch,
@@ -63,7 +57,7 @@ const App = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<addListItemFormType>({
+  } = useForm<AddListItemFormType>({
     resolver: zodResolver(addListItemFormSchema),
   });
 
@@ -75,6 +69,12 @@ const App = () => {
   } = useForm<UpdateNameFormType>({
     resolver: zodResolver(updateNameFormSchema),
   });
+
+  useEffect(() => {
+    if (!data.length) {
+      setIsShowInput(true);
+    }
+  }, [data]);
 
   useEffect(() => {
     const itemToEdit = data.find(({ id }) => id === editId);
@@ -89,7 +89,7 @@ const App = () => {
     ...new Set(data.map(({ category }) => category)),
   ];
 
-  const onSubmit: SubmitHandler<addListItemFormType> = (data) =>
+  const onSubmit: SubmitHandler<AddListItemFormType> = (data) =>
     addItem(data, {
       onSuccess: () =>
         reset({
@@ -106,20 +106,6 @@ const App = () => {
     }
   };
 
-  const handleIncrease = (id: string, quantity: number) => {
-    updateQuantity({ id, quantity: quantity + 1 });
-  };
-
-  const handleDecrease = (id: string, quantity: number) => {
-    if (quantity > 0) {
-      updateQuantity({ id, quantity: quantity - 1 });
-    }
-  };
-
-  const handleUpdatePurchaseStatus = (id: string, purchase: boolean) => () => {
-    updatePurchaseStatus({ id, purchased: !purchase });
-  };
-
   const openModal = (id: string) => () => {
     setActiveItemId(id);
     setIsModalOpen(true);
@@ -128,6 +114,19 @@ const App = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setActiveItemId(null);
+  };
+
+  const handleQuantityChange =
+    ({ id, quantity, action }: QuantityChangeParams) =>
+    () => {
+      const newQuantity = action === 'increase' ? quantity + 1 : quantity - 1;
+      if (newQuantity >= 0) {
+        updateQuantity({ id, quantity: newQuantity });
+      }
+    };
+
+  const handleUpdatePurchaseStatus = (id: string, purchase: boolean) => () => {
+    updatePurchaseStatus({ id, purchased: !purchase });
   };
 
   const handleRemoveItem = () => {
@@ -214,13 +213,21 @@ const App = () => {
                   <Button
                     aria-label='minus'
                     className={styles.iconButton}
-                    onClick={() => handleDecrease(id, quantity)}>
+                    onClick={handleQuantityChange({
+                      id,
+                      quantity,
+                      action: 'decrease',
+                    })}>
                     <Minus />
                   </Button>
                   <Button
                     aria-label='plus'
                     className={styles.iconButton}
-                    onClick={() => handleIncrease(id, quantity)}>
+                    onClick={handleQuantityChange({
+                      id,
+                      quantity,
+                      action: 'increase',
+                    })}>
                     <Plus />
                   </Button>
                   <span>({quantity})</span>

@@ -9,4 +9,4 @@ export const addListItemFormSchema = z.object({
   category: z.string().min(1, 'Category is required').max(30, 'Max 30 symbols'),
 });
 
-export type addListItemFormType = z.infer<typeof addListItemFormSchema>;
+export type AddListItemFormType = z.infer<typeof addListItemFormSchema>;

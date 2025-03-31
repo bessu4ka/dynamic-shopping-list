@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react';
 // hooks
-import { useOutsideClick } from '../../../hooks/useOutsideClick';
+import { useOutsideClick } from '../../../hooks/use-outside-click';
 // types
 import type { CustomSelectProps } from './select.interface';
 // styles
