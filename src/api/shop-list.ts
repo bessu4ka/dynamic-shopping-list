@@ -43,4 +43,12 @@ export const shopListApi = {
       console.error('Error deleting item:', error);
     }
   },
+
+  updateName: async (id: string, name: string) => {
+    try {
+      return (await instance.patch(`shopList/${id}`, { name })).data;
+    } catch (error) {
+      console.error('Error updating name:', error);
+    }
+  },
 };

@@ -13,7 +13,7 @@ const CustomSelect: FC<CustomSelectProps> = ({
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useOutsideClick(() => setIsOpen(false));
+  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
   const handleSelectChange = (option: string) => () => {
     onChange(option);

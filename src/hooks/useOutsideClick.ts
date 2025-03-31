@@ -1,8 +1,9 @@
-// hooks
 import { useEffect, useRef } from 'react';
 
-export const useOutsideClick = (callback: () => void) => {
-  const ref = useRef<HTMLDivElement>(null);
+export const useOutsideClick = <T extends HTMLElement>(
+  callback: () => void,
+) => {
+  const ref = useRef<T | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -12,7 +13,6 @@ export const useOutsideClick = (callback: () => void) => {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };

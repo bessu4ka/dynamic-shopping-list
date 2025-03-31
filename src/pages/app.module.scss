@@ -70,6 +70,12 @@
         .text {
           text-decoration: line-through;
         }
+
+        .updateNameForm {
+          display: flex;
+          align-items: center;
+          column-gap: 6px;
+        }
       }
 
       .iconButton {
